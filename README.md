@@ -1,8 +1,8 @@
-Pre-req (windows users):
+Pre-req:
 1. Python 3.9 (https://www.python.org/downloads/)
 2. git (https://git-scm.com/downloads)
 
-Steps:
+Steps for Windows users:
 1. Type cmd in the search bar in the bottom left corner of your screen
 2. Type "git clone https://github.com/grinchybirb/texturepack.git"
 3. Type "cd texturepack"
@@ -13,7 +13,7 @@ Steps:
 8. Put it on top of any texture pack you have active.
 9. HJAHve FUneNENE!!!JKL!JKL!!
 
-For Mac Users.
+Steps for MacOS users:
 This part is a little different because downloading git is the hardest part.
 1. Download Python 3.9 (https://www.python.org/downloads/)
 2. Go to the git website (https://git-scm.com/downloads).
