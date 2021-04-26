@@ -27,11 +27,12 @@ def show_png(list_files):
     
     temp = os.path.join(cdir,html_file)
     url = 'file:///'+temp
+
     webbrowser.open_new(url)
 
 
 
-def util(source_dir,target_dir):
+def copy_util(source_dir,target_dir):
     # copying files
     i=0
     list_files=[]
@@ -44,7 +45,11 @@ def util(source_dir,target_dir):
                 i +=1
 
     # it is inclusive, meaning 2 and 5 will be in it
-    show_png(list_files)
+    print("To see the images of the files type: show. To continue to selection, press ENTER.")
+    temp_str2=input().lower().strip()
+    if temp_str2=="show":
+        show_png(list_files)
+
     print("Select item(s). E.g. 1 3-5 15 ")
     temp_str = input().lower().strip()
     if temp_str=="":
@@ -79,6 +84,7 @@ sword_dir=os.path.join(sample_dir,"swords")
 gui_dir=os.path.join(sample_dir,"gui")
 wool_dir=os.path.join(sample_dir,"wool")
 particle_dir=os.path.join(sample_dir,"particles")
+gapple_dir=os.path.join(sample_dir,"gapples")
 target_base =  os.path.join(".","target") 
 zipfile_name=os.path.join(".","walrus")
 
@@ -96,23 +102,31 @@ os.mkdir(target_dir_temp,0o777)
 target_dir_temp=os.path.join(target_dir_temp,"textures")
 os.mkdir(target_dir_temp,0o777)
 
-# add swords
+
 target_dir=os.path.join(target_dir_temp,"items")
 os.mkdir(target_dir)
-util(sword_dir,target_dir)
 
-# add wool
+# add gapples
+copy_util(gapple_dir,target_dir)
+# add swords
+copy_util(sword_dir,target_dir)
+
+
 target_dir=os.path.join(target_dir_temp,"blocks")
 os.mkdir(target_dir)
-util(wool_dir,target_dir)
+# add wool
+copy_util(wool_dir,target_dir)
 
 target_dir=os.path.join(target_dir_temp,"particle")
 os.mkdir(target_dir)
-util(particle_dir,target_dir)
+# add particles
+copy_util(particle_dir,target_dir)
 
 target_dir=os.path.join(target_dir_temp,"gui")
 os.mkdir(target_dir)
-util(gui_dir,target_dir)
+# add crosshair
+copy_util(gui_dir,target_dir)
+
 
 
 
