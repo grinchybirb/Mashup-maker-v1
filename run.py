@@ -4,7 +4,8 @@ import zipfile
 import webbrowser
 
 # build html file, and show list of pngs
-def show_png(list_files):
+def show_png(list_files,list_roots):
+
     cdir=os.getcwd()
     html_file="walrus.html"
     f = open(html_file, "w")
@@ -13,9 +14,15 @@ def show_png(list_files):
     f.write("<body>\n")
     f.write("<h1>Select item(s). E.g. 1 3-5 15, remember your numbers, and write it in the command line</h1>\n")
     f.write("<TABLE>")
+
     f.write("<TR>")
     count=0
+    current_root=None
     for full_file in list_files:
+        if list_roots[count]!=current_root:
+            f.write("</TR>")
+            f.write("<TR>")
+            current_root=list_roots[count]
         f.write("<TD>")
         tmp='<p> Image number '+str(count)+'</p>\n'
         f.write(tmp)
@@ -23,8 +30,11 @@ def show_png(list_files):
         tmp='<img src="file:///'+full_file2+ '" alt="walrus" style="width:100px;height:100px;">\n'
         f.write(tmp)
         f.write("</TD>")
-        count +=1
+        count +=1     
     f.write("</TR>")
+    
+
+
     f.write("</TABLE>")
     f.write("</body>\n")
     f.write("</html>\n")
@@ -42,11 +52,14 @@ def copy_util(source_dir,target_dir):
     # copying files
     i=0
     list_files=[]
+    list_roots=[]
     for root, dirs, files in os.walk(source_dir, topdown=True):
+        # print(root)
         for file in files:
             if file.endswith(".png"):
                 full_file=os.path.join(root,file)
                 list_files.append(full_file)
+                list_roots.append(root)
                 print(i,full_file)
                 i +=1
 
@@ -54,7 +67,7 @@ def copy_util(source_dir,target_dir):
     print("To see the images of the files type: show. To continue to selection, press ENTER.")
     temp_str2=input().lower().strip()
     if temp_str2=="show":
-        show_png(list_files)
+        show_png(list_files,list_roots)
 
     print("Select item(s). E.g. 1 3-5 15 ")
     temp_str = input().lower().strip()
