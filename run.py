@@ -12,14 +12,20 @@ def show_png(list_files):
     f.write("<html>\n")
     f.write("<body>\n")
     f.write("<h1>Select item(s). E.g. 1 3-5 15, remember your numbers, and write it in the command line</h1>\n")
+    f.write("<TABLE>")
+    f.write("<TR>")
     count=0
     for full_file in list_files:
+        f.write("<TD>")
         tmp='<p> Image number '+str(count)+'</p>\n'
         f.write(tmp)
         full_file2=os.path.join(cdir,full_file)
         tmp='<img src="file:///'+full_file2+ '" alt="walrus" style="width:100px;height:100px;">\n'
         f.write(tmp)
+        f.write("</TD>")
         count +=1
+    f.write("</TR>")
+    f.write("</TABLE>")
     f.write("</body>\n")
     f.write("</html>\n")
     f.close()
