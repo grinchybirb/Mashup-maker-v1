@@ -4,7 +4,7 @@ import zipfile
 import webbrowser
 
 # build html file, and show list of pngs
-def show_png(list_files,list_roots):
+def show_png(list_roots2,list_of_lists_of_files):
 
     cdir=os.getcwd()
     html_file="walrus.html"
@@ -15,24 +15,22 @@ def show_png(list_files,list_roots):
     f.write("<h1>Select item(s). E.g. 1 3-5 15, remember your numbers, and write it in the command line</h1>\n")
     f.write("<TABLE>")
 
-    f.write("<TR>")
-    count=0
-    current_root=None
-    for full_file in list_files:
-        if list_roots[count]!=current_root:
-            f.write("</TR>")
-            f.write("<TR>")
-            current_root=list_roots[count]
-        f.write("<TD>")
-        tmp='<p> Image number '+str(count)+'</p>\n'
-        f.write(tmp)
-        full_file2=os.path.join(cdir,full_file)
-        tmp='<img src="file:///'+full_file2+ '" alt="walrus" style="width:100px;height:100px;">\n'
-        f.write(tmp)
-        f.write("</TD>")
-        count +=1     
-    f.write("</TR>")
-    
+    row_count=0
+    img_count=0
+    for root in list_roots2:
+        f.write("<TR>\n")
+        for file in list_of_lists_of_files[row_count]:
+            f.write("<TD>")
+            root2=os.path.join(cdir,root)
+            full_file2=os.path.join(root2,file)
+            tmp='<img src="file:///'+full_file2+ '" alt="walrus" style="width:100px;height:100px;">\n'
+            f.write(tmp)
+            tmp='<p> Image number '+str(img_count)+'</p>\n'
+            f.write(tmp)
+            f.write("</TD>")
+            img_count +=1
+        f.write("</TR>\n")
+        row_count +=1
 
 
     f.write("</TABLE>")
@@ -52,14 +50,19 @@ def copy_util(source_dir,target_dir):
     # copying files
     i=0
     list_files=[]
-    list_roots=[]
+    list_roots2=[]
+    list_of_lists_of_files=[]
     for root, dirs, files in os.walk(source_dir, topdown=True):
+        print("=======",root,dirs,files)
+        if len(files)!=0:
+            list_roots2.append(root)
+            list_of_lists_of_files.append(files)
+
         # print(root)
         for file in files:
             if file.endswith(".png"):
                 full_file=os.path.join(root,file)
                 list_files.append(full_file)
-                list_roots.append(root)
                 print(i,full_file)
                 i +=1
 
@@ -67,7 +70,7 @@ def copy_util(source_dir,target_dir):
     print("To see the images of the files type: show. To continue to selection, press ENTER.")
     temp_str2=input().lower().strip()
     if temp_str2=="show":
-        show_png(list_files,list_roots)
+        show_png(list_roots2,list_of_lists_of_files)
 
     print("Select item(s). E.g. 1 3-5 15 ")
     temp_str = input().lower().strip()
@@ -77,14 +80,25 @@ def copy_util(source_dir,target_dir):
     for temp in temp_list:
         if "-" in temp:
             # range
-            list_files_num=temp.split("-")
-            low=int(list_files_num[0])
-            high=int(list_files_num[1])
+            try:
+                list_files_num=temp.split("-")
+                low=int(list_files_num[0])
+                high=int(list_files_num[1])
+            except ValueError:
+                print('Non-integer input: Section IGNORED')
+                return
         else:
-            low=int(temp)
-            high=low
+            try:
+                low = int(temp)
+                high=low
+            except ValueError:
+                # Handle the exception
+                print('Non-integer input: Section IGNORED')
+                return
+            
+            
         if high>=len(list_files):
-            print("Invalid: Too high",high)
+            print("Invalid: Too high, section IGNORED",high)
             return
         for i_c in range(low,high+1):
             shutil.copy(list_files[i_c],target_dir)
@@ -104,6 +118,7 @@ gui_dir=os.path.join(sample_dir,"gui")
 wool_dir=os.path.join(sample_dir,"wool")
 particle_dir=os.path.join(sample_dir,"particles")
 gapple_dir=os.path.join(sample_dir,"gapples")
+tools_dir=os.path.join(sample_dir,"tools")
 target_base =  os.path.join(".","target") 
 zipfile_name=os.path.join(".","walrus")
 
@@ -125,10 +140,14 @@ os.mkdir(target_dir_temp,0o777)
 target_dir=os.path.join(target_dir_temp,"items")
 os.mkdir(target_dir)
 
-# add gapples
-copy_util(gapple_dir,target_dir)
 # add swords
 copy_util(sword_dir,target_dir)
+# add gapples
+copy_util(gapple_dir,target_dir)
+# add tools
+# add gapples
+copy_util(tools_dir,target_dir)
+
 
 
 target_dir=os.path.join(target_dir_temp,"blocks")
