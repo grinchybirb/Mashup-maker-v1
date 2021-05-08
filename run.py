@@ -13,7 +13,7 @@ def show_png(list_roots2,list_of_lists_of_files):
     f.write("<html>\n")
     f.write("<body>\n")
     f.write("<h1>Select item(s). E.g. 1 3-5 15, remember your numbers, and write it in the command line</h1>\n")
-    f.write("<TABLE>")
+    f.write("<TABLE border='1' >")
 
     row_count=0
     img_count=0
@@ -44,6 +44,14 @@ def show_png(list_roots2,list_of_lists_of_files):
 
     webbrowser.open_new(url)
 
+def show_png2(list_roots2,list_of_lists_of_files):
+    iroot=0
+    ifile=0
+    for root in list_roots2:
+        for file in list_of_lists_of_files[iroot]:
+            print(ifile,root,file)
+            ifile +=1
+        iroot +=1
 
 
 def copy_util(source_dir,target_dir):
@@ -63,9 +71,10 @@ def copy_util(source_dir,target_dir):
             if file.endswith(".png"):
                 full_file=os.path.join(root,file)
                 list_files.append(full_file)
-                print(i,full_file)
+                # print(i,full_file)
                 i +=1
 
+    show_png2(list_roots2,list_of_lists_of_files)
     # it is inclusive, meaning 2 and 5 will be in it
     print("To see the images of the files type: show. To continue to selection, press ENTER.")
     temp_str2=input().lower().strip()
